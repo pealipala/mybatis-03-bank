@@ -5,7 +5,7 @@ public class Account {
     //账户id
     private int id;
     //账户账号
-    private int accNo;
+    private String accNo;
     //账户密码
     private int password;
     //账户余额
@@ -21,11 +21,11 @@ public class Account {
         this.id = id;
     }
 
-    public int getAccNo() {
+    public String getAccNo() {
         return accNo;
     }
 
-    public void setAccNo(int accNo) {
+    public void setAccNo(String accNo) {
         this.accNo = accNo;
     }
 

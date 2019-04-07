@@ -20,10 +20,10 @@ public class TransferServlet extends HttpServlet {
         //设置请求编码格式
         req.setCharacterEncoding("utf-8");
         //获取请求信息
-        int accOutAccNo = Integer.parseInt(req.getParameter("accOutAccNo"));
+        String accOutAccNo =req.getParameter("accOutAccNo");
         int accOutPassword = Integer.parseInt(req.getParameter("accOutPassword"));
         Double accOutBalance = Double.valueOf(req.getParameter("accOutBalance"));
-        int accInAccNo = Integer.parseInt(req.getParameter("accInAccNo"));
+        String accInAccNo = req.getParameter("accInAccNo");
         String accInName = req.getParameter("accInName");
         //处理请求信息
         Account accOut=new Account();
@@ -37,7 +37,7 @@ public class TransferServlet extends HttpServlet {
         int index= accountService.transfer(accIn,accOut);
         //响应处理结果
         if(index==AccountService.SUCCESS){
-            resp.sendRedirect("/success.jsp");
+            resp.sendRedirect("/show");
         }else {
             HttpSession session = req.getSession();
             session.setAttribute("index",index);

@@ -1,6 +1,8 @@
 package com.service.impl;
 
 import com.pojo.Account;
+import com.pojo.Log;
+import com.pojo.PageInfo;
 import com.service.AccountService;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -29,6 +31,11 @@ public class AccountServiceImpl implements AccountService {
                     int index = sqlSession.update("com.mapper.AccountMapper.updateBalByAccno",accOut);
                     index+=sqlSession.update("com.mapper.AccountMapper.updateBalByAccno",accIn);
                     if(index==2){
+                        Log log=new Log();
+                        log.setAccIn(accIn.getAccNo());
+                        log.setAccOut(accOut.getAccNo());
+                        log.setMoney(accIn.getBalance());
+                        sqlSession.insert("com.mapper.LogMapper.insertLog",log);
                         sqlSession.commit();
                         sqlSession.close();
                         //转账成功
@@ -51,4 +58,5 @@ public class AccountServiceImpl implements AccountService {
             return ACCOUNT_PASSWORD_NOT_MATCH;
         }
     }
+
 }
