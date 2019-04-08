@@ -14,6 +14,7 @@ import java.io.IOException;
 
 @WebServlet(name = "TransferServlet",urlPatterns = "/transfer")
 public class TransferServlet extends HttpServlet {
+    //获取service对象
     private AccountService accountService=new AccountServiceImpl();
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

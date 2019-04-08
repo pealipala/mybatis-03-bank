@@ -2,7 +2,6 @@ package com.service.impl;
 
 import com.pojo.Account;
 import com.pojo.Log;
-import com.pojo.PageInfo;
 import com.service.AccountService;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -21,7 +20,9 @@ public class AccountServiceImpl implements AccountService {
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         //生产 SqlSession
         SqlSession sqlSession = sqlSessionFactory.openSession();
+        //返回查询结果
         Account accOutSel = sqlSession.selectOne("com.mapper.AccountMapper.selByAccnoPwd",accOut);
+        //处理查询结果
         if(accOutSel!=null){
             if (accOutSel.getBalance()>=accOut.getBalance()){
                 Account accInSel=sqlSession.selectOne("com.mapper.AccountMapper.selByAccnoName",accIn);
@@ -31,16 +32,20 @@ public class AccountServiceImpl implements AccountService {
                     int index = sqlSession.update("com.mapper.AccountMapper.updateBalByAccno",accOut);
                     index+=sqlSession.update("com.mapper.AccountMapper.updateBalByAccno",accIn);
                     if(index==2){
+                        //创建log对象并传值
                         Log log=new Log();
                         log.setAccIn(accIn.getAccNo());
                         log.setAccOut(accOut.getAccNo());
                         log.setMoney(accIn.getBalance());
+                        //执行sql命令
                         sqlSession.insert("com.mapper.LogMapper.insertLog",log);
+                        //事务提交
                         sqlSession.commit();
                         sqlSession.close();
                         //转账成功
                          return SUCCESS;
                     }else {
+                        //事务回滚
                         sqlSession.rollback();
                         //转账失败
                         return  ERROR;
